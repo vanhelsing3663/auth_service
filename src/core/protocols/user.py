@@ -2,6 +2,7 @@ from typing import Protocol, Optional, List
 from src.core.entities.user import User
 from src.core.entities.user import UserRole
 
+
 class UserRepository(Protocol):
     async def create_user(self, login: str, email: str, password: str) -> User:
         """Создать пользователя с уникальным username и email."""
@@ -26,7 +27,7 @@ class UserRepository(Protocol):
     async def get_user_roles(self, login: str) -> List[UserRole]:
         """Получить роли пользователя по его имени."""
         raise NotImplementedError
-    
+
     async def commit(self):
         raise NotImplementedError
 

@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from main.dependencies import init_dependencies
 
+
 @asynccontextmanager
 async def lifespan(_):
     yield

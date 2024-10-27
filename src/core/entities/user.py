@@ -11,7 +11,7 @@ class User:
     login: str
     email: str
     password_hash: str
-    role: Optional[UserRole] = None
+    roles: Optional[list[UserRole]] = None
 
     @classmethod
     def create(cls, login: str, email: str, password: str) -> "User":
