@@ -1,7 +1,10 @@
+from pathlib import Path
 
 from pydantic import BaseModel, PostgresDsn, TypeAdapter, computed_field
 from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+BASE_DIR = Path(__file__).parent.parent
 
 
 class RunConfig(BaseModel):
@@ -16,10 +19,19 @@ class RunConfig(BaseModel):
 
         reload (bool = False): Reload Uvicorn для src изменений (debug).
     """
+
     host: str
     port: int
     workers: int = None
     reload: bool = False
+
+
+class AuthJWT(BaseModel):
+    private_key_path: Path = BASE_DIR
+    public_key_path: Path = BASE_DIR
+    algorithm: str = "RS256"  # Для приаватного и пубилчного ключа
+    access_token_expire_minutes: int = 15
+    refresh_token_expire_days: int = 30
 
 
 class DatabaseConfig(BaseModel):
@@ -153,6 +165,7 @@ class Settings(BaseSettings):
     )
     run: RunConfig
     db: DatabaseConfig
+    auth_jwt: AuthJWT = AuthJWT()
 
 
 settings = Settings()
