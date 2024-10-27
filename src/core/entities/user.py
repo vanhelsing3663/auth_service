@@ -10,7 +10,7 @@ class User:
     id: int
     login: str
     email: str
-    password_hash: str
+    password_hash: str | bytes
     roles: Optional[list[UserRole]] = None
 
     @classmethod
