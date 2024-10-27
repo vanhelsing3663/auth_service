@@ -12,6 +12,12 @@ class UserRepository(Protocol):
         """Добавить роль пользователю для конкретного сервиса, если такой роли еще нет."""
         raise NotImplementedError
 
+    async def get_by_id(self, user_id: int):
+        raise NotImplementedError
+
+    async def update_user(self, user: User):
+        raise NotImplementedError
+
     async def delete_user(self, login: str) -> None:
         """Удалить пользователя по его username."""
         raise NotImplementedError

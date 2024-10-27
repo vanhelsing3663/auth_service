@@ -41,12 +41,16 @@ class UserRepositoryImpl(UserRepository):
             .offset(offset)
             .limit(limit)
         )
-        
+
         result = await self.session.execute(query)
         users = result.fetchall()
 
     async def add_user_role(self, login: str, role: int) -> None:
         pass
+
+    async def get_by_id(self, user_id: int):
+        user_table = await self.session.get(UserTable, user_id)
+        return user_table.as_domain_object()
 
     async def commit(self):
         try:

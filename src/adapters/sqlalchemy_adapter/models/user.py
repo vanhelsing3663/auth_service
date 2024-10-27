@@ -13,7 +13,7 @@ class UserTable(Base):
     login: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
-    role: Mapped[int] = mapped_column(
+    roles: Mapped[int] = mapped_column(
         ForeignKey(f"{TableName.USER_ROLES}.id"), nullable=True
     )
 
@@ -25,5 +25,8 @@ class UserTable(Base):
             login=user.login,
             email=user.email,
             password_hash=user.password_hash,
-            role=user.role if user.role else None,
+            role=user.roles if user.roles else None,
         )
+
+    async def as_domain_object(self):
+        return User(id=self.id, login=self.login, email=self.email, roles=self.roles)
