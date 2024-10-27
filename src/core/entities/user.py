@@ -1,18 +1,8 @@
 from dataclasses import dataclass
 from typing import Optional
 import bcrypt
+from core.entities.roles import UserRole
 from src.core.exception.exception import ItemDataConflict
-
-
-@dataclass
-class UserRole:
-    id: int
-    service: str
-    role: str
-
-    @classmethod
-    def create(cls, service: str, role: str):
-        return cls(service=service, role=role)
 
 
 @dataclass
