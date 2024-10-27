@@ -1,5 +1,5 @@
 from typing import List
-from sqlalchemy import delete
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import DBAPIError
 from adapters.sqlalchemy_adapter.models.user import UserTable
@@ -13,20 +13,28 @@ class UserRepositoryImpl(UserRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create_user(self, login: str, email: str, password: str):
-        user = User.create(login=login, email=email, password=password)
-        user_record = UserTable(
-            login=user.login, email=user.email, password_hash=user.password_hash
-        )
+    async def create_user(self, user: User):
+        user_record = UserTable.create_from_domain_object(user)
+        await self.session.add(user_record)
 
     async def delete_user(self, login: str) -> None:
         await self.session.execute(delete(UserTable).where(UserTable.login == login))
 
+    async def get_user_by_credentials(self, login: str):
+        await self.session.execute(
+            select(
+                UserTable.id,
+                UserTable.email,
+                UserTable.login,
+                UserTable.role,
+            ).where(UserTable.login == login)
+        )
+
     async def get_all_users(self, page: int, limit: int) -> List[User]:
         pass
 
-    async def add_user_role(self, login: str, service: str, role: str) -> None:
-        user_role = User.add_role(login=login, service=service, role=role)
+    async def add_user_role(self, login: str, role: int) -> None:
+        pass
 
     async def commit(self):
         try:
