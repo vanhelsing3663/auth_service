@@ -31,7 +31,19 @@ class UserRepositoryImpl(UserRepository):
         )
 
     async def get_all_users(self, page: int, limit: int) -> List[User]:
-        pass
+        offset = (page - 1) * limit
+        query = (
+            select(
+                UserTable.email,
+                UserTable.login,
+                UserTable.role,
+            )
+            .offset(offset)
+            .limit(limit)
+        )
+        
+        result = await self.session.execute(query)
+        users = result.fetchall()
 
     async def add_user_role(self, login: str, role: int) -> None:
         pass
